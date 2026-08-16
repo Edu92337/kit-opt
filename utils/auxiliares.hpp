@@ -19,7 +19,7 @@ vector<int> tres_nos_aleatorios(Solucao s){
     no2 = 1 + rand() % n;
     while(no2 == no1) no2 = 1 + rand() % n;
     no3 = 1 + rand() % n;
-    while(no3 == no2 || no2 == no1) no3 = 1 + rand() % n;
+    while(no3 == no2 || no3 == no1) no3 = 1 + rand() % n;
     return {no1,no2,no3};
 }
 

@@ -4,9 +4,11 @@
 
 typedef struct ILS ILS;
 struct ILS {
+    ILS(Data* data_original);
     Data* data;
-    ILS(int argc,char** argv);
-    float alfa;
+    //int arg1;
+    //char** arg2;
+    double alfa;
     Solucao construcao();
     vector<Insertion_info> calcular_custo_insercao(Solucao& s, vector<int>&CL);
 };

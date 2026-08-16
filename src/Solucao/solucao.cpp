@@ -2,8 +2,9 @@
 #include<vector>
 #include"solucao.hpp"
 
-Solucao::Solucao(int argc, char* argv[]) : Data(argc, argv[1]){
+Solucao::Solucao(Data* data_original){
     valor_obj = 0;
+    data = data_original;
 }
 
 void Solucao::exibe_solucao(){
@@ -20,6 +21,6 @@ void Solucao::calcula_valor_obj(){
     Solucao::valor_obj = 0;
     for(int i = 0;i<Solucao::sequencia.size()-1;i++){
         // incrementa o custo de ir da cidade atual (i) para a proxima da sequencia (i + 1)
-        Solucao::valor_obj += getDistance(sequencia[i],sequencia[i+1]);
+        Solucao::valor_obj += data->getDistance(sequencia[i],sequencia[i+1]);
     }
 }

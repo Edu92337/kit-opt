@@ -12,6 +12,7 @@ struct Solucao {
     void exibe_solucao();
     void add_no(double x);
     void calcula_valor_obj();
+    int dist(int i,int j);
 };
 
 

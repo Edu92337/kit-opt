@@ -24,3 +24,7 @@ void Solucao::calcula_valor_obj(){
         Solucao::valor_obj += data->getDistance(sequencia[i],sequencia[i+1]);
     }
 }
+
+int Solucao::dist(int i ,int j){
+    return data->getDistance(i,j);
+}

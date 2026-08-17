@@ -1,6 +1,12 @@
 #pragma once
 #include"solucao.hpp"
 
+typedef struct  Insertion_info Insertion_info;
+struct Insertion_info{
+    int no_inserido;
+    int aresta_removida;
+    double custo;
+};
 
 typedef struct ILS ILS;
 struct ILS {
@@ -15,9 +21,3 @@ struct ILS {
 
 };
 
-typedef struct  Insertion_info Insertion_info;
-struct Insertion_info{
-    int no_inserido;
-    int aresta_removida;
-    double custo;
-};

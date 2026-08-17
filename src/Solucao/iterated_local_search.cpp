@@ -38,15 +38,17 @@ Solucao ILS::construcao(){
         s.add_no(custo_insercao[selecionado].no_inserido);
         CL = nos_restantes(&s);
     }
-    s.calcula_valor_obj();
+    s.calcula_valor_obj(); // Atualiza o custo dessa solução criada
     return s;
 }
 
 
-bool best_improvement_swap(Solucao* s){
+bool ILS::best_improvement_swap(Solucao* s){
     double best_delta = 0;
-    int best_i, best_j;
+    int best_i, best_j; // Melhores candidatos a troca
     for(int i = 1;i<s->sequencia.size()-1;i++){
+        // Itera por todos os pares, comparando o custo novo
+        // mantendo os Nós adjacentes
         int vi = s->sequencia[i];
         int vi_next = s->sequencia[i+1];
         int vi_prev = s->sequencia[i-1];
@@ -66,13 +68,14 @@ bool best_improvement_swap(Solucao* s){
         
         }
     }
-
+    // Melhor custo novo é menor que o custo anterior 
+    // -> indica melhora na solução
     if(best_delta < 0){
         std::swap(s->sequencia[best_i],s->sequencia[best_j]);
         s->valor_obj += best_delta;
         return true;
     }
-    return false;
+    return false; // Não achou na vizinhança um vizinho com custo menor
 }
 
 

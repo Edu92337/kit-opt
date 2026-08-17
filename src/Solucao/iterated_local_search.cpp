@@ -93,9 +93,9 @@ bool ILS::best_improvement_2_opt(Solucao* s){
         for(int j = i+2;j<s->sequencia.size()-1;j++){
             //if(j == i+1 || j == i-1)continue;
             int vj = s->sequencia[j];
-            int vj_prev = s->sequencia[j-1];
-            double delta = -s->dist(vi,vi_prev) - s->dist(vj,vj_prev) 
-            + s->dist(vi,vj_prev) + s->dist(vj,vi_prev);
+            int vj_next = s->sequencia[j+1];
+            double delta = -s->dist(vi,vi_prev) - s->dist(vj,vj_next) 
+            + s->dist(vi,vj_next) + s->dist(vj,vi_prev);
 
             if(delta < best_delta){
                 best_delta = delta;
@@ -112,6 +112,47 @@ bool ILS::best_improvement_2_opt(Solucao* s){
     }return false;
 }
 
+
+/*
+t_bloco = 1
+Solução inicial :[1,7,6,4,10,3,9,2,8,5,1]
+Solução final   :[1,7,6,10,3,9,2,8,4,5,1]
+
+t_bloco = 2
+Solução inicial :[1,7,6,4,10,3,9,2,8,5,1]
+Solução final   :[1,7,6,3,9,2,8,4,10,5,1]
+*/
+bool ILS::best_improvement_or_opt(Solucao* s, int t_bloco){
+    double best_delta = 0;
+    int best_i,best_j;
+    for(int i = t_bloco;i<s->sequencia.size()-t_bloco;i++){
+        int vi = s->sequencia[i];
+        //Precisa analisar o tamanho do bloco
+        int vi_next = s->sequencia[i+t_bloco];
+        int vi_prev = s->sequencia[i-t_bloco];
+        
+        for(int j = i+t_bloco;j<s->sequencia.size()-1;j++){
+            int vj = s->sequencia[j];
+            int vj_prev = s->sequencia[j-t_bloco];
+            double delta = -s->dist(vi,vi_prev) -s->dist(vi,vi_next) - s->dist(vj,vj_prev)
+                +s->dist(vi_prev,vi_next) + s->dist(vi,vj_prev) + s->dist(vi,vj);
+            
+            if(delta < best_delta){
+                best_delta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        }
+    }
+    if(best_delta < 0){
+        //remove bloco da posição inicial(i) e coloca na posição final(j)
+        std::vector<int>intervalo_removido(s->sequencia.begin()+best_i,s->sequencia.begin()+t_bloco);
+        s->sequencia.erase(s->sequencia.begin() + best_i,s->sequencia.begin() + best_i + t_bloco);
+        //inserir o intervalo removido
+        s->sequencia.insert(s->sequencia.begin() + best_j - t_bloco,intervalo_removido.begin(),intervalo_removido.end());
+        return true;
+    }return false;
+}
 
 void ILS::busca_local(Solucao* s){
     // Vai buscar uma solução melhor na vizinhaça de um dos 

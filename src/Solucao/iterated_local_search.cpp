@@ -38,7 +38,41 @@ Solucao ILS::construcao(){
         s.add_no(custo_insercao[selecionado].no_inserido);
         CL = nos_restantes(&s);
     }
+    s.calcula_valor_obj();
     return s;
+}
+
+
+bool best_improvement_swap(Solucao* s){
+    double best_delta = 0;
+    int best_i, best_j;
+    for(int i = 1;i<s->sequencia.size()-1;i++){
+        int vi = s->sequencia[i];
+        int vi_next = s->sequencia[i+1];
+        int vi_prev = s->sequencia[i-1];
+        for(int j = i+1;j<s->sequencia.size()-1;j++){
+            int vj = s->sequencia[j];
+            int vj_next = s->sequencia[j+1];
+            int vj_prev = s->sequencia[j-1];
+            double delta = -s->dist(vi_prev,vi) - s->dist(vi,vi_next) + s->dist(vi_prev,vj)
+                + s->dist(vj,vi_next) - s->dist(vj_prev,vj) -s->dist(vj,vj_next)
+                +s->dist(vj_prev,vi) + s->dist(vi,vj_next);
+            
+            if(delta < best_delta){
+                best_delta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        
+        }
+    }
+
+    if(best_delta < 0){
+        std::swap(s->sequencia[best_i],s->sequencia[best_j]);
+        s->valor_obj += best_delta;
+        return true;
+    }
+    return false;
 }
 
 

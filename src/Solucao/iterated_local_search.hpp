@@ -11,6 +11,8 @@ struct ILS {
     double alfa;
     Solucao construcao();
     vector<Insertion_info> calcular_custo_insercao(Solucao& s, vector<int>&CL);
+    bool best_improvement_swap(Solucao* s);
+
 };
 
 typedef struct  Insertion_info Insertion_info;

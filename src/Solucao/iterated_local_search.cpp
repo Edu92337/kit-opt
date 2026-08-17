@@ -78,6 +78,40 @@ bool ILS::best_improvement_swap(Solucao* s){
     return false; // Não achou na vizinhança um vizinho com custo menor
 }
 
+/*
+Solução inicial :[1,7,6,4,10,3,9,2,8,5,1]
+Solução final   :[1,9,3,10,4,6,7,2,8,5,1]
+
+->[9,3,10,4,6,7] foi invertido
+*/
+bool ILS::best_improvement_2_opt(Solucao* s){
+    double best_delta = 0;
+    int best_i, best_j;
+    for(int i = 1;i<s->sequencia.size();i++){
+        int vi = s->sequencia[i];
+        int vi_prev = s->sequencia[i-1];
+        for(int j = i+2;j<s->sequencia.size()-1;j++){
+            //if(j == i+1 || j == i-1)continue;
+            int vj = s->sequencia[j];
+            int vj_prev = s->sequencia[j-1];
+            double delta = -s->dist(vi,vi_prev) - s->dist(vj,vj_prev) 
+            + s->dist(vi,vj_prev) + s->dist(vj,vi_prev);
+
+            if(delta < best_delta){
+                best_delta = delta;
+                best_i = i;
+                best_j = j;
+            }
+        }
+    }
+
+    if(best_delta < 0){
+        // intervalo [i,j+1) -> [i,j]
+        reverse(s->sequencia.begin()+best_i,s->sequencia.begin()+best_j + 1); 
+        return true;
+    }return false;
+}
+
 
 void ILS::busca_local(Solucao* s){
     // Vai buscar uma solução melhor na vizinhaça de um dos 

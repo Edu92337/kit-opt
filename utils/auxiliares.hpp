@@ -23,9 +23,9 @@ vector<int> tres_nos_aleatorios(Solucao s){
     return {no1,no2,no3};
 }
 
-vector<int> nos_restantes(Solucao s){
+vector<int> nos_restantes(Solucao* s){
     vector<int>restantes;
-    for(int i = 1;i<=s.data->getDimension();i++){
-        if(count(s.sequencia.begin(),s.sequencia.end(),i) == 0)restantes.push_back(i);
+    for(int i = 1;i<=s->data->getDimension();i++){
+        if(count(s->sequencia.begin(),s->sequencia.end(),i) == 0)restantes.push_back(i);
     }return restantes;
 }

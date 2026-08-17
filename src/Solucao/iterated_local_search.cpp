@@ -29,14 +29,14 @@ vector<Insertion_info> ILS::calcular_custo_insercao(Solucao& s, vector<int>&CL){
 Solucao ILS::construcao(){
     Solucao s(data); // Recebe o mesmo ponteiro de data que a solução
     s.sequencia = tres_nos_aleatorios(s);
-    vector<int>CL = nos_restantes(s);
+    vector<int>CL = nos_restantes(&s);
     while(!CL.empty()){
         vector<Insertion_info> custo_insercao = calcular_custo_insercao(s,CL);
         ordena(custo_insercao);
         alfa = (double) rand()/RAND_MAX;
         int selecionado = rand()%((int)ceil(alfa * custo_insercao.size()));
         s.add_no(custo_insercao[selecionado].no_inserido);
-        CL = nos_restantes(s);
+        CL = nos_restantes(&s);
     }
     return s;
 }

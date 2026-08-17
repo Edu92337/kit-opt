@@ -79,4 +79,37 @@ bool ILS::best_improvement_swap(Solucao* s){
 }
 
 
+void ILS::busca_local(Solucao* s){
+    // Vai buscar uma solução melhor na vizinhaça de um dos 
+    // 5 métodos apresentados (swap,2-opt,or-opt,reinsertion,or-opt2)
+    // Escolhido de forma aleatória
+    std::vector<int>NL ={1,2,3,4,5};
+    bool improved = false;
+
+    while(!NL.empty()){
+        int n = rand() % NL.size();
+        switch(NL[n]){
+            case 1:
+                improved = best_improvement_swap(s);
+                break;
+            case 2:
+                improved = best_improvement_2_opt(s);
+                break;
+            case 3:
+                improved = best_improvement_or_opt(s,1);
+                break;
+            case 4:
+                improved = best_improvement_or_opt(s,2);
+                break;
+            case 5:
+                improved = best_improvement_or_opt(s,3);
+                break;
+        }
+        //Se melhorou,mantém todas para tentar novamente até não ser possível mais melhorar
+        if(improved) NL = {1,2,3,4,5}; 
+        else NL.erase(NL.begin()+n); // remove essa vizinhança
+    }
+}
+
+
 

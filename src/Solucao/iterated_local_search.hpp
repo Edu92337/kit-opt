@@ -18,6 +18,8 @@ struct ILS {
     Solucao construcao();
     vector<Insertion_info> calcular_custo_insercao(Solucao& s, vector<int>&CL);
     bool best_improvement_swap(Solucao* s);
-
+    bool best_improvement_2_opt(Solucao* s);
+    bool best_improvement_or_opt(Solucao* s,int i);
+    void busca_local(Solucao* s);
 };
 

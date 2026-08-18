@@ -204,3 +204,31 @@ Solucao ILS::perturbacao(Solucao* s){
     swap_intervalos(sf,p1,p2,t1,t2);
     return *sf;
 }
+
+
+
+Solucao ILS::solver(int max_iter, int max_iter_ils){
+    Solucao melhor_de_todas(data);
+    melhor_de_todas.valor_obj = INFINITY;
+
+    for(int i = 0;i<max_iter;i++){
+        Solucao s = construcao();
+        Solucao melhor = s;
+
+        int iter_ils = 0;
+
+        while(iter_ils <= max_iter_ils){
+            busca_local(&s);
+            if(s.valor_obj < melhor.valor_obj){
+                melhor = s;
+                iter_ils = 0;
+            }
+            s = perturbacao(&melhor);
+            iter_ils++;
+        }
+        if(melhor.valor_obj < melhor_de_todas.valor_obj){
+            melhor_de_todas = melhor;
+        }
+    }
+    return melhor_de_todas;
+}

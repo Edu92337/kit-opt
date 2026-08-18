@@ -22,5 +22,6 @@ struct ILS {
     bool best_improvement_or_opt(Solucao* s,int i);
     void busca_local(Solucao* s);
     Solucao perturbacao(Solucao* s);
+    Solucao solver(int max_iter, int max_iter_ils);
 };
 

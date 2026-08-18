@@ -108,6 +108,7 @@ bool ILS::best_improvement_2_opt(Solucao* s){
     if(best_delta < 0){
         // intervalo [i,j+1) -> [i,j]
         reverse(s->sequencia.begin()+best_i,s->sequencia.begin()+best_j + 1); 
+        s->valor_obj += best_delta;
         return true;
     }return false;
 }
@@ -146,10 +147,11 @@ bool ILS::best_improvement_or_opt(Solucao* s, int t_bloco){
     }
     if(best_delta < 0){
         //remove bloco da posição inicial(i) e coloca na posição final(j)
-        std::vector<int>intervalo_removido(s->sequencia.begin()+best_i,s->sequencia.begin()+t_bloco);
+        std::vector<int>intervalo_removido(s->sequencia.begin()+best_i,s->sequencia.begin()+best_i+t_bloco);
         s->sequencia.erase(s->sequencia.begin() + best_i,s->sequencia.begin() + best_i + t_bloco);
         //inserir o intervalo removido
         s->sequencia.insert(s->sequencia.begin() + best_j - t_bloco,intervalo_removido.begin(),intervalo_removido.end());
+        s->valor_obj += best_delta;
         return true;
     }return false;
 }

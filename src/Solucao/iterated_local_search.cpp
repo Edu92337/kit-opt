@@ -191,8 +191,8 @@ void ILS::busca_local(Solucao* s){
 
 Solucao ILS::perturbacao(Solucao* s){
     Solucao* sf = new Solucao(*s);
-    int t_max = s->data->getDimension()/10;
     int n = s->data->getDimension();
+    int t_max = std::max(1, (int)ceil(s->data->getDimension() / 10.0));
     int t1 = 2 + rand() % t_max;
     int t2 = 2 + rand() % t_max;
     // posição final : p1 + t1 - 1

@@ -187,4 +187,20 @@ void ILS::busca_local(Solucao* s){
 }
 
 
-
+Solucao ILS::perturbacao(Solucao* s){
+    Solucao* sf = new Solucao(*s);
+    int t_max = s->data->getDimension()/10;
+    int n = s->data->getDimension();
+    int t1 = 2 + rand() % t_max;
+    int t2 = 2 + rand() % t_max;
+    // posição final : p1 + t1 - 1
+    int p1 = rand() % (n - t1 - t2 + 1);
+    //garantir que p2 não inicie no intervalo de p1
+    // posição final não pode sair do vetor
+    int p2 = p1 + t1 + rand() % n;
+    while(p2 + t2 > n){
+        p2 = p1 + t1 + rand() % n;
+    }
+    swap_intervalos(sf,p1,p2,t1,t2);
+    return *sf;
+}

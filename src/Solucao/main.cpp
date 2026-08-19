@@ -12,12 +12,15 @@ int main(int arg,char* argv[]){
     }
     Data* data = new Data(arg,argv[1]);
     data->read();
+    std::cout << "Instância: " << data->getInstanceName() << std::endl;
+    std::cout << "Dimensão: " << data->getDimension() << std::endl;
     ILS heuristica(data);
     int max_iter = 50;
     int max_iter_ils;
     if(data->getDimension() >= 150){
         max_iter_ils = data->getDimension()/2;
     }else max_iter_ils = data->getDimension();
+    //Solucao s = heuristica.construcao();
     Solucao s = heuristica.solver(max_iter,max_iter_ils);
     cout <<s.valor_obj<<endl;
 

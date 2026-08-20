@@ -46,7 +46,7 @@ Solucao ILS::construcao(){
 
 
 bool ILS::best_improvement_swap(Solucao* s){
-    double best_delta = 0;
+    double best_delta = INFINITY;
     int best_i, best_j; // Melhores candidatos a troca
     for(int i = 1;i<s->sequencia.size()-1;i++){
         // Itera por todos os pares, comparando o custo novo
@@ -55,13 +55,21 @@ bool ILS::best_improvement_swap(Solucao* s){
         int vi_next = s->sequencia[i+1];
         int vi_prev = s->sequencia[i-1];
         for(int j = i+1;j<s->sequencia.size()-1;j++){
+            double delta;
             int vj = s->sequencia[j];
             int vj_next = s->sequencia[j+1];
             int vj_prev = s->sequencia[j-1];
-            double delta = -s->dist(vi_prev,vi) - s->dist(vi,vi_next) + s->dist(vi_prev,vj)
-                + s->dist(vj,vi_next) - s->dist(vj_prev,vj) -s->dist(vj,vj_next)
-                +s->dist(vj_prev,vi) + s->dist(vi,vj_next);
-            
+            // O  cálculo muda para Nós adjacentes
+            if(j == i+1 || j == i-1){
+                delta =-s->dist(vi_prev, vi) - s->dist(vj, vj_next) - s->dist(vi,vi_next)
+                        +s->dist(vi_prev, vj) +s->dist(vj, vi) +s->dist(vi, vj_next);
+            }
+            else{
+                delta = -s->dist(vi_prev,vi) -s->dist(vi,vi_next) +s->dist(vi_prev,vj)
+                        +s->dist(vj,vi_next) -s->dist(vj_prev,vj) -s->dist(vj,vj_next) + s->dist(vj_prev,vi) 
+                        +s->dist(vi,vj_next);
+            }
+
             if(delta < best_delta){
                 best_delta = delta;
                 best_i = i;
@@ -75,6 +83,7 @@ bool ILS::best_improvement_swap(Solucao* s){
     if(best_delta < 0){
         std::swap(s->sequencia[best_i],s->sequencia[best_j]);
         s->valor_obj += best_delta;
+        //s->calcula_valor_obj();
         return true;
     }
     return false; // Não achou na vizinhança um vizinho com custo menor
@@ -194,7 +203,6 @@ void ILS::busca_local(Solucao* s){
         //Se melhorou,mantém todas para tentar novamente até não ser possível mais melhorar
         if(improved) NL = {1,2,3,4,5}; 
         else NL.erase(NL.begin()+n); // remove essa vizinhança
-        
     }
 }
 

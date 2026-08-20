@@ -28,7 +28,7 @@ vector<Insertion_info> ILS::calcular_custo_insercao(Solucao& s, vector<int>&CL){
 
 Solucao ILS::construcao(){
     Solucao s(data); // Recebe o mesmo ponteiro de data que a solução
-    std::cout << "Construindo uma solução inicial..." << std::endl;
+    //std::cout << "Construindo uma solução inicial..." << std::endl;
     s.sequencia = tres_nos_aleatorios(s);
     vector<int>CL = nos_restantes(&s);
     while(!CL.empty()){
@@ -41,7 +41,7 @@ Solucao ILS::construcao(){
     }
     s.add_no(s.sequencia[0]); // fecha o ciclo
     s.calcula_valor_obj(); // Atualiza o custo dessa solução criada
-    std::cout<<"Solução inicial construída com custo :"<<s.valor_obj<<std::endl;
+    //std::cout<<"Solução inicial construída com custo :"<<s.valor_obj<<std::endl;
     return s;
 }
 
@@ -210,23 +210,23 @@ void ILS::busca_local(Solucao* s){
         switch(NL[n]){
             case 1:
                 improved = best_improvement_swap(s);
-                std::cout << "Melhorando a solução com custo(swap):"<<s->valor_obj << std::endl;
+                //std::cout << "Melhorando a solução com custo(swap):"<<s->valor_obj << std::endl;
                 break;
             case 2:
                 improved = best_improvement_2_opt(s);
-                std::cout << "Melhorando a solução com custo(2_opt) :"<<s->valor_obj << std::endl;
+                //std::cout << "Melhorando a solução com custo(2_opt) :"<<s->valor_obj << std::endl;
                 break;
             case 3:
                 improved = best_improvement_or_opt(s,1);
-                std::cout << "Melhorando a solução com custo(or_opt1) :"<<s->valor_obj << std::endl;
+                //std::cout << "Melhorando a solução com custo(or_opt1) :"<<s->valor_obj << std::endl;
                 break;
             case 4:
                 improved = best_improvement_or_opt(s,2);
-                std::cout << "Melhorando a solução com custo(or_opt2) :"<<s->valor_obj << std::endl;
+                //std::cout << "Melhorando a solução com custo(or_opt2) :"<<s->valor_obj << std::endl;
                 break;
             case 5:
                 improved = best_improvement_or_opt(s,3);
-                std::cout << "Melhorando a solução com custo(or_opt3) :"<<s->valor_obj << std::endl;
+                //std::cout << "Melhorando a solução com custo(or_opt3) :"<<s->valor_obj << std::endl;
                 break;
         }
         
@@ -238,7 +238,7 @@ void ILS::busca_local(Solucao* s){
 
 
 Solucao ILS::perturbacao(Solucao* s){
-    std::cout << "Perturbando a solução com custo :"<<s->valor_obj << std::endl;
+    //std::cout << "Perturbando a solução com custo :"<<s->valor_obj << std::endl;
     Solucao sf(*s);
     int n = s->data->getDimension();
     int t_max = std::max(1, (int)ceil(s->data->getDimension() / 10.0));
@@ -256,7 +256,7 @@ Solucao ILS::perturbacao(Solucao* s){
     swap_intervalos(&sf,p1,p2,t1,t2);
     // Precisa atualizar para calcular com delta
     sf.calcula_valor_obj();
-    std::cout << "valor apos a perturbação solução com custo :"<<sf.valor_obj << std::endl;
+    //std::cout << "valor apos a perturbação solução com custo :"<<sf.valor_obj << std::endl;
     return sf;
 }
 

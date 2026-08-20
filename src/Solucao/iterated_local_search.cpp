@@ -39,6 +39,7 @@ Solucao ILS::construcao(){
         s.add_no(custo_insercao[selecionado].no_inserido);
         CL = nos_restantes(&s);
     }
+    s.add_no(s.sequencia[0]); // fecha o ciclo
     s.calcula_valor_obj(); // Atualiza o custo dessa solução criada
     std::cout<<"Solução inicial construída com custo :"<<s.valor_obj<<std::endl;
     return s;
@@ -253,6 +254,7 @@ Solucao ILS::perturbacao(Solucao* s){
     while(p2 + t2 - 1 >= n) p2 = p1 + t1 + rand() % (n - t2 -p1-t1 + 1);
 
     swap_intervalos(&sf,p1,p2,t1,t2);
+    // Precisa atualizar para calcular com delta
     sf.calcula_valor_obj();
     std::cout << "valor apos a perturbação solução com custo :"<<sf.valor_obj << std::endl;
     return sf;

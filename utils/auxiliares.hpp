@@ -42,17 +42,20 @@ Vetor original : [1,14,5,4,8,7,13,6,12,3,10,2,11,9,1]
 [1,14,3,10,2,11,5,4,8,7,13,6,12,5,4,9,1]
 
 */
-void swap_intervalos(Solucao* s, int i, int j,int t_bloco1,int t_bloco2){
-    vector<int>bloco1(s->sequencia.begin() + i,s->sequencia.begin() + i + t_bloco1);
-    vector<int>bloco2(s->sequencia.begin() + j,s->sequencia.begin() + j + t_bloco2);
+void swap_intervalos(Solucao* s, int i, int j, int t_bloco1, int t_bloco2){
     
-    //colocar bloco1 na nova posição
-    s->sequencia.insert(s->sequencia.begin() + j,bloco1.begin(),bloco1.end());
-    //remover o bloco1 original
-    s->sequencia.erase(s->sequencia.begin() + i,s->sequencia.begin() + i + t_bloco1);
+    if(i>j){
+        std::swap(i,j);
+        std::swap(t_bloco1,t_bloco2);
+    }
+    vector<int> bloco1(s->sequencia.begin() + i, s->sequencia.begin() + i + t_bloco1);
+    vector<int> bloco2(s->sequencia.begin() + j, s->sequencia.begin() + j + t_bloco2);
 
-    //colocar bloco2 na nova posição
-    s->sequencia.insert(s->sequencia.begin() + i,bloco2.begin(),bloco2.end());
-    //remover bloco2 original
-    s->sequencia.erase(s->sequencia.begin() + j + t_bloco2,s->sequencia.begin() + j + 2*t_bloco2);
+    // erase do maior índice pro menor
+    s->sequencia.erase(s->sequencia.begin() + j, s->sequencia.begin() + j + t_bloco2);
+    s->sequencia.erase(s->sequencia.begin() + i, s->sequencia.begin() + i + t_bloco1);
+
+    // insere bloco2 no lugar de bloco1 deslocado por (t_bloco2 - t_bloco1)
+    s->sequencia.insert(s->sequencia.begin() + i, bloco2.begin(), bloco2.end());
+    s->sequencia.insert(s->sequencia.begin() + j + (t_bloco2 - t_bloco1), bloco1.begin(), bloco1.end());
 }

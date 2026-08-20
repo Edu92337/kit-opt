@@ -98,15 +98,15 @@ Solução final   :[1,9,3,10,4,6,7,2,8,5,1]
 bool ILS::best_improvement_2_opt(Solucao* s){
     double best_delta = 0;
     int best_i, best_j;
-    for(int i = 1;i<s->sequencia.size();i++){
+    for(int i = 1;i<s->sequencia.size()-1;i++){
         int vi = s->sequencia[i];
-        int vi_prev = s->sequencia[i-1];
-        for(int j = i+2;j<s->sequencia.size()-1;j++){
-            //if(j == i+1 || j == i-1)continue;
+        int vi_next = s->sequencia[i+1];
+        for(int j = i+1;j<s->sequencia.size()-1;j++){
+            if(j == i+1 || j == i-1)continue;
             int vj = s->sequencia[j];
             int vj_next = s->sequencia[j+1];
-            double delta = -s->dist(vi,vi_prev) - s->dist(vj,vj_next) 
-            + s->dist(vi,vj_next) + s->dist(vj,vi_prev);
+            double delta = -s->dist(vi,vi_next) - s->dist(vj,vj_next) 
+            + s->dist(vi_next,vj_next) + s->dist(vj,vi);
 
             if(delta < best_delta){
                 best_delta = delta;
@@ -118,7 +118,8 @@ bool ILS::best_improvement_2_opt(Solucao* s){
 
     if(best_delta < 0){
         // intervalo [i,j+1) -> [i,j]
-        reverse(s->sequencia.begin()+best_i,s->sequencia.begin()+best_j + 1); 
+        std::swap(s->sequencia[best_i + 1],s->sequencia[best_j]);
+        reverse(s->sequencia.begin()+best_i + 2,s->sequencia.begin()+best_j); 
         s->valor_obj += best_delta;
         return true;
     }return false;
@@ -137,19 +138,27 @@ Solução final   :[1,7,6,3,9,2,8,4,10,5,1]
 bool ILS::best_improvement_or_opt(Solucao* s, int t_bloco){
     double best_delta = 0;
     int best_i,best_j;
-    for(int i = t_bloco;i<s->sequencia.size()-t_bloco;i++){
+    for(int i = 1;i<s->sequencia.size()-t_bloco;i++){
         int vi = s->sequencia[i];
         //Precisa analisar o tamanho do bloco
         int vi_next = s->sequencia[i+t_bloco];
         int vi_prev = s->sequencia[i-1];
         int vi_fim = s->sequencia[i+t_bloco-1];
         
-        for(int j = i+t_bloco;j<s->sequencia.size()-1;j++){
+        for(int j = 1;j<s->sequencia.size()-1;j++){
+            double delta;
             int vj = s->sequencia[j];
-            int vj_prev = s->sequencia[j-1];
-            double delta = -s->dist(vi_prev,vi) - s->dist(vi_fim,vi_next) - s->dist(vj_prev,vj)
-                + s->dist(vi_prev,vi_next) + s->dist(vj_prev,vi) + s->dist(vi_fim,vj);
-            
+            int vj_next= s->sequencia[j+1];
+            if(j == i || j == i-1) continue;
+            if(j>=i && j<=i+ t_bloco-1) continue;
+            if(t_bloco == 1){
+                delta = -s->dist(vi_prev,vi) - s->dist(vi,vi_next) - s->dist(vj,vj_next)
+                        + s->dist(vi_prev,vi_next) + s->dist(vj,vi) + s->dist(vi,vj_next);
+            }
+            else{
+                delta = -s->dist(vi_prev,vi) - s->dist(vi_fim,vi_next) - s->dist(vj,vj_next)
+                        + s->dist(vi,vj) + s->dist(vi_prev,vi_next) + s->dist(vi_fim,vj_next);
+            }
             if(delta < best_delta){
                 best_delta = delta;
                 best_i = i;
@@ -158,14 +167,34 @@ bool ILS::best_improvement_or_opt(Solucao* s, int t_bloco){
         }
     }
     if(best_delta < 0){
-        //remove bloco da posição inicial(i) e coloca na posição final(j)
-        std::vector<int>intervalo_removido(s->sequencia.begin()+best_i,s->sequencia.begin()+best_i+t_bloco);
-        s->sequencia.erase(s->sequencia.begin() + best_i,s->sequencia.begin() + best_i + t_bloco);
-        //inserir o intervalo removido
-        s->sequencia.insert(s->sequencia.begin() + best_j - t_bloco,intervalo_removido.begin(),intervalo_removido.end());
+        if(t_bloco == 1){
+            s->sequencia.insert(s->sequencia.begin()+best_j+1,s->sequencia[best_i]);
+            // remove o nó original 
+            if(best_i > best_j) s->sequencia.erase(s->sequencia.begin()+best_i+1);
+            
+            // Se o nó removido estiver antes do nó inserido, o índice do nó removido aumenta em 1
+            else s->sequencia.erase(s->sequencia.begin()+best_i);
+
+        }else{
+            //intervalo removido -> [i,i+t_bloco)
+            std::vector<int>intervalo_removido(s->sequencia.begin()+best_i,s->sequencia.begin()+best_i+t_bloco);
+            if(best_i > best_j){
+                // coloca o intervalo removido na posição j+1
+                s->sequencia.insert(s->sequencia.begin()+best_j+1,intervalo_removido.begin(),intervalo_removido.end());
+                // remove o intervalo original
+                s->sequencia.erase(s->sequencia.begin()+best_i+t_bloco,s->sequencia.begin()+best_i+t_bloco+t_bloco);
+            }else{
+
+                // remove o intervalo original
+                s->sequencia.erase(s->sequencia.begin()+best_i,s->sequencia.begin()+best_i+t_bloco);
+                // coloca o intervalo removido na posição j+1
+                s->sequencia.insert(s->sequencia.begin()+best_j-t_bloco+1,intervalo_removido.begin(),intervalo_removido.end());
+            }
+        }
         s->valor_obj += best_delta;
         return true;
-    }return false;
+    }
+    return false;
 }
 
 void ILS::busca_local(Solucao* s){
@@ -223,6 +252,7 @@ Solucao ILS::perturbacao(Solucao* s){
         p2 = p1 + t1 + rand() % n;
     }
     swap_intervalos(sf,p1,p2,t1,t2);
+    sf->calcula_valor_obj();
     std::cout << "valor apos a perturbação solução com custo :"<<sf->valor_obj << std::endl;
     return *sf;
 }

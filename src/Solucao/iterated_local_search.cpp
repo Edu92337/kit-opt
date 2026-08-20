@@ -47,7 +47,7 @@ Solucao ILS::construcao(){
 
 
 bool ILS::best_improvement_swap(Solucao* s){
-    double best_delta = INFINITY;
+    double best_delta = 0;
     int best_i, best_j; // Melhores candidatos a troca
     for(int i = 1;i<s->sequencia.size()-1;i++){
         // Itera por todos os pares, comparando o custo novo

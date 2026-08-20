@@ -54,5 +54,5 @@ void swap_intervalos(Solucao* s, int i, int j,int t_bloco1,int t_bloco2){
     //colocar bloco2 na nova posição
     s->sequencia.insert(s->sequencia.begin() + i,bloco2.begin(),bloco2.end());
     //remover bloco2 original
-    s->sequencia.erase(s->sequencia.begin() + j + t_bloco1,s->sequencia.begin() + j + t_bloco1 + t_bloco2);
+    s->sequencia.erase(s->sequencia.begin() + j + t_bloco2,s->sequencia.begin() + j + 2*t_bloco2);
 }

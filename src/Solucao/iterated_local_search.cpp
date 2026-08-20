@@ -238,23 +238,24 @@ void ILS::busca_local(Solucao* s){
 
 Solucao ILS::perturbacao(Solucao* s){
     std::cout << "Perturbando a solução com custo :"<<s->valor_obj << std::endl;
-    Solucao* sf = new Solucao(*s);
+    Solucao sf(*s);
     int n = s->data->getDimension();
     int t_max = std::max(1, (int)ceil(s->data->getDimension() / 10.0));
     int t1 = 2 + rand() % t_max;
     int t2 = 2 + rand() % t_max;
+
     // posição final : p1 + t1 - 1
-    int p1 = rand() % (n - t1 - t2 + 1);
+    int p1 = 1 + rand() % (n - t1 -t2 -1);
     //garantir que p2 não inicie no intervalo de p1
     // posição final não pode sair do vetor
-    int p2 = p1 + t1 + rand() % n;
-    while(p2 + t2 > n){
-        p2 = p1 + t1 + rand() % n;
-    }
-    swap_intervalos(sf,p1,p2,t1,t2);
-    sf->calcula_valor_obj();
-    std::cout << "valor apos a perturbação solução com custo :"<<sf->valor_obj << std::endl;
-    return *sf;
+    int p2 = p1 + t1 + rand() % (n - t2 -p1-t1 + 1);
+
+    while(p2 + t2 - 1 >= n) p2 = p1 + t1 + rand() % (n - t2 -p1-t1 + 1);
+
+    swap_intervalos(&sf,p1,p2,t1,t2);
+    sf.calcula_valor_obj();
+    std::cout << "valor apos a perturbação solução com custo :"<<sf.valor_obj << std::endl;
+    return sf;
 }
 
 

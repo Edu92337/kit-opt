@@ -12,7 +12,8 @@ struct Solucao {
     void exibe_solucao();
     void add_no(double x);
     void calcula_valor_obj();
-    double dist(int i,int j);
+    //double dist(int i,int j);
+    inline double dist(int i,int j) {return data->getDistance(i,j);};
 };
 
 

@@ -25,6 +25,6 @@ void Solucao::calcula_valor_obj(){
     }
 }
 
-double Solucao::dist(int i ,int j){
+/*double Solucao::dist(int i ,int j){
     return data->getDistance(i,j);
-}
+}*/

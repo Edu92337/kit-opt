@@ -21,12 +21,17 @@ int main(int arg,char* argv[]){
         max_iter_ils = data->getDimension()/2;
     }else max_iter_ils = data->getDimension();
     //Solucao s = heuristica.construcao();
-
-    auto inicio = std::chrono::high_resolution_clock::now();
-    Solucao s = heuristica.solver(max_iter,max_iter_ils);
-    auto fim = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> tempo = fim - inicio;
-    std::cout << "Tempo: " << tempo.count() << " segundos\n";
+    std::chrono::duration<double> tempo_medio = std::chrono::duration<double>::zero();
+    Solucao s(data);
+    for(int i = 0;i<10;i++){
+        auto inicio = std::chrono::high_resolution_clock::now();
+        s = heuristica.solver(max_iter,max_iter_ils);
+        auto fim = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> tempo = fim - inicio;
+        tempo_medio += tempo;
+    }
+    
+    std::cout << "Tempo: " << tempo_medio.count()/(double)10.0 << " segundos\n";
     std::cout <<"Custo: "<<s.valor_obj<<std::endl;
 
 

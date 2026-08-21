@@ -252,10 +252,29 @@ Solucao ILS::perturbacao(Solucao* s){
     int p2 = p1 + t1 + rand() % (n - t2 -p1-t1 + 1);
 
     while(p2 + t2 - 1 >= n) p2 = p1 + t1 + rand() % (n - t2 -p1-t1 + 1);
+    
+    // Remove ligação do inicio e fim dos blocos 1 e 2
+    // Adiciona as novas ligações entre os blocos 1 e 2
+    double delta;
+    if(p2 == p1 + t1){
+        // blocos adjacentes: s->sequencia[p1+t1] == s->sequencia[p2]
+        delta = - s->dist(s->sequencia[p1-1],s->sequencia[p1]) - s->dist(s->sequencia[p1+t1-1],s->sequencia[p2])
+                - s->dist(s->sequencia[p2+t2-1],s->sequencia[p2+t2])
+                + s->dist(s->sequencia[p1-1],s->sequencia[p2]) + s->dist(s->sequencia[p2+t2-1],s->sequencia[p1])
+                + s->dist(s->sequencia[p1+t1-1],s->sequencia[p2+t2]);
+    } else {
+        // blocos não adjacentes
+        delta = - s->dist(s->sequencia[p1-1],s->sequencia[p1]) - s->dist(s->sequencia[p1+t1-1],s->sequencia[p1+t1])
+                - s->dist(s->sequencia[p2-1],s->sequencia[p2]) - s->dist(s->sequencia[p2+t2-1],s->sequencia[p2+t2])
+                + s->dist(s->sequencia[p1-1],s->sequencia[p2]) + s->dist(s->sequencia[p2+t2-1],s->sequencia[p1+t1])
+                + s->dist(s->sequencia[p2-1],s->sequencia[p1]) + s->dist(s->sequencia[p1+t1-1],s->sequencia[p2+t2]);
+    }
 
     swap_intervalos(&sf,p1,p2,t1,t2);
+    
     // Precisa atualizar para calcular com delta
-    sf.calcula_valor_obj();
+    //sf.calcula_valor_obj();
+    sf.valor_obj += delta;
     //std::cout << "valor apos a perturbação solução com custo :"<<sf.valor_obj << std::endl;
     return sf;
 }

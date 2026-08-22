@@ -2,6 +2,7 @@
 #include"iterated_local_search.hpp"
 #include"solucao.hpp"
 #include <chrono>
+#include <random>
 
 
 
@@ -10,6 +11,7 @@ int main(int arg,char* argv[]){
         cerr << "Uso: ./a <instancia.tsp>" << endl;
         return 1;
     }
+    srand(std::chrono::high_resolution_clock::now().time_since_epoch().count());
     Data* data = new Data(arg,argv[1]);
     data->read();
     //std::cout << "Instância: " << data->getInstanceName() << std::endl;
@@ -32,7 +34,7 @@ int main(int arg,char* argv[]){
     }
     
     std::cout << "Tempo: " << tempo_medio.count()/(double)10.0 << " segundos\n";
-    std::cout <<"Custo: "<<s.valor_obj<<std::endl;
+    std::cout <<"Custo: "<<s.valor_obj<<'\n';
 
 
     return 0;

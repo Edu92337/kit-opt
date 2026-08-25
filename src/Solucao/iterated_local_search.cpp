@@ -255,7 +255,7 @@ Solucao ILS::perturbacao(Solucao* s){
     
     // Remove ligação do inicio e fim dos blocos 1 e 2
     // Adiciona as novas ligações entre os blocos 1 e 2
-    double delta;
+    double delta = 0.0;
     if(p2 == p1 + t1){
         // blocos adjacentes: s->sequencia[p1+t1] == s->sequencia[p2]
         delta = - s->dist(s->sequencia[p1-1],s->sequencia[p1]) - s->dist(s->sequencia[p1+t1-1],s->sequencia[p2])

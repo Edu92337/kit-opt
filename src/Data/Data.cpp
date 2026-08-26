@@ -444,7 +444,7 @@ double Data::CalcDistGeo ( double *latit, double *longit, int I, int J )
 	q3 = cos( latit[I] + latit[J] );
 
 	return
-		RRR * acos( 0.5*((1.0+q1)*q2 - (1.0-q1)*q3) ) + 1.0;
+		(int)(RRR * acos( 0.5*((1.0+q1)*q2 - (1.0-q1)*q3) ) + 1.0);
 }
 
 

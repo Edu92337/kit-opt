@@ -34,14 +34,12 @@ vector<int> nos_restantes(Solucao* s){
 Vetor original : [1,14,5,4,8,7,13,6,12,3,10,2,11,9,1]
 ->coloca o bloco1 na nova posição
 [1,14,5,4,8,7,13,6,12,5,4,3,10,2,11,9,1]
+->remove primeiro bloco:
+[1,14,8,7,13,6,12,5,4,3,10,2,11,9,1]
 ->coloca bloco2:
 [1,14,3,10,2,11,5,4,8,7,13,6,12,5,4,3,10,2,11,9,1]
--> remove bloco1:
-idx a remover = i + t_bloco2
-[1,14,3,10,2,11,8,7,13,6,12,5,4,3,10,2,11,9,1]
--> remove bloco2:
-idx a remover = j + t_bloco2 
-[1,14,3,10,2,11,8,7,13,6,12,5,4,9,1]
+->remove bloco2 original
+[1,14,3,10,2,11,5,4,8,7,13,6,12,5,4,9,1]
 
 */
 void swap_intervalos(Solucao* s, int i, int j, int t_bloco1, int t_bloco2){
@@ -52,12 +50,12 @@ void swap_intervalos(Solucao* s, int i, int j, int t_bloco1, int t_bloco2){
     }
     vector<int> bloco1(s->sequencia.begin() + i, s->sequencia.begin() + i + t_bloco1);
     vector<int> bloco2(s->sequencia.begin() + j, s->sequencia.begin() + j + t_bloco2);
-    
-    // Colocar bloco1 no inicio do bloco2 e bloco 2 no inicio do bloco1
-    s->sequencia.insert(s->sequencia.begin() + j,bloco1.begin(),bloco1.end());
-    s->sequencia.insert(s->sequencia.begin() + i,bloco2.begin(),bloco2.end());
-    // Remover os blocos originais
-    s->sequencia.erase(s->sequencia.begin() + i + t_bloco2,s->sequencia.begin() + i + t_bloco2 + t_bloco1);
-    s->sequencia.erase(s->sequencia.begin() + j + t_bloco2,s->sequencia.begin() + j + 2*t_bloco2);
 
+    // erase do maior índice pro menor
+    s->sequencia.erase(s->sequencia.begin() + j, s->sequencia.begin() + j + t_bloco2);
+    s->sequencia.erase(s->sequencia.begin() + i, s->sequencia.begin() + i + t_bloco1);
+
+    // insere bloco2 no lugar de bloco1 deslocado por (t_bloco2 - t_bloco1)
+    s->sequencia.insert(s->sequencia.begin() + i, bloco2.begin(), bloco2.end());
+    s->sequencia.insert(s->sequencia.begin() + j + (t_bloco2 - t_bloco1), bloco1.begin(), bloco1.end());
 }
